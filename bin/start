@@ -2,5 +2,5 @@
 
 require_relative '../config/environment'
 
-API.new.start
-binding.pry
+API.new
+Cli.new

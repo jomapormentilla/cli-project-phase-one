@@ -1,4 +1,4 @@
-class Spells
+class Spell
     attr_accessor :id, :name, :type, :effect
 
     @@all = []

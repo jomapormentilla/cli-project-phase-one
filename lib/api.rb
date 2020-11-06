@@ -6,12 +6,14 @@ class API
     def initialize
         @url_base = "https://www.potterapi.com/v1/"
         @api_key = "$2a$10$54kkWPrtIA6zbGri3jkccOKg0kwMdmfJg1344F3p2qzPFBFZfZqAC"
+        start
     end
 
     def start
         # Load all data from APIs
         get_spells
         get_houses
+        get_characters
     end
 
     def get_data( type )
@@ -22,15 +24,17 @@ class API
     end
 
     def get_spells
-        spells = get_data("spells")
-
-        # Load all spells into the Spells Class
-        spells.each{ |spell| Spells.new( spell["_id"], spell["spell"], spell["type"], spell["effect"] ) }
+        spells = get_data("spells").uniq
+        spells.each{ |spell| Spell.new( spell["_id"], spell["spell"], spell["type"], spell["effect"] ) }
+    end
+    
+    def get_houses
+        houses = get_data("houses").uniq
+        houses.each{ |house| House.new( house["_id"], house["name"], house["mascot"], house["founder"], house["headOfHouse"]) }
     end
 
-    def get_houses
-        houses = get_data("houses")
-
-        houses.each{ |house| Houses.new( house["_id"], house["name"], house["mascot"], house["founder"], house["headOfHouse"]) }
+    def get_characters
+        characters = get_data("characters").uniq
+        characters.each{ |character| Character.new( character["name"], character["role"], character["house"] ) }
     end
 end
