@@ -1,5 +1,5 @@
 class Character
-    attr_accessor :name, :role, :house
+    attr_accessor :name, :role, :house, :spells
 
     @@all = []
 
