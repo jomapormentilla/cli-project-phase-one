@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../environment'
+require_relative '../config/environment'
 
-API.start
+API.new.start
+binding.pry
