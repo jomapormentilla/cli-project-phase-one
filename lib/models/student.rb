@@ -1,19 +1,5 @@
-class Student
-    attr_accessor :name, :house, :spells, :friends, :enemies, :status
-
-    @@all = []
-
-    def initialize( name, house )
-        @name = name
-        @house = house
-        @status = "Enrolled"
-
-        @@all << self
-    end
-
-    def self.all
-        @@all
-    end
+class Student < Character
+    attr_accessor :spells, :friends, :enemies, :status
 
     # The User will insantiate as a new Student
     # Knows which house they belong to

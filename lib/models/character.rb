@@ -3,15 +3,21 @@ class Character
 
     @@all = []
 
-    def initialize( name, rolse, house )
+    def initialize( name, role, house=nil )
         @name = name
         @role = role
-        @house = house
 
+        self.house=( house )
+        
         @@all << self
     end
-
+    
     def self.all
         @@all
+    end
+    
+    def house=( house )
+        _house = House.all.find{ |obj| obj.name == house }
+        @house = _house
     end
 end

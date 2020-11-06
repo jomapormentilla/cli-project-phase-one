@@ -17,4 +17,8 @@ class House
     def self.all
         @@all
     end
+
+    def add_character( character )
+        character.house = self
+    end
 end
