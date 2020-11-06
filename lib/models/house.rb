@@ -1,10 +1,9 @@
 class House
-    attr_accessor :id, :name, :mascot, :founder, :head_master, :house_points
+    attr_accessor :name, :mascot, :founder, :head_master, :house_points
 
     @@all = []
 
-    def initialize( id, name, mascot, founder, head_master )
-        @id = id
+    def initialize( name, mascot, founder, head_master )
         @name = name
         @mascot = mascot
         @founder = founder

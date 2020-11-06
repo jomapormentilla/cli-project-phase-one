@@ -1,7 +1,11 @@
 class Professor < Character
     # Can teach spells
 
-    def teach_spell( spell, student )
+    def self.all
+        @@all.select{ |character| character.role == "Professor" }
+    end
 
+    def teach_spell( spell, student )
+        student.learn( spell )
     end
 end

@@ -25,16 +25,27 @@ class API
 
     def get_spells
         spells = get_data("spells").uniq
-        spells.each{ |spell| Spell.new( spell["_id"], spell["spell"], spell["type"], spell["effect"] ) }
+        spells.each.with_index{ |spell, index| Spell.new( index, spell["spell"], spell["type"], spell["effect"] ) }
     end
     
     def get_houses
         houses = get_data("houses").uniq
-        houses.each{ |house| House.new( house["_id"], house["name"], house["mascot"], house["founder"], house["headOfHouse"]) }
+        houses.each{ |house| House.new( house["name"], house["mascot"], house["founder"], house["headOfHouse"]) }
     end
 
     def get_characters
         characters = get_data("characters").uniq
-        characters.each{ |character| Character.new( character["name"], character["role"], character["house"] ) }
+        characters.each{ |character|
+        if character["role"] != nil
+                role_formatted = character["role"].split(", ")[0].capitalize
+                if role_formatted == "Student"
+                    Student.new( character["name"], role_formatted, character["house"] )
+                elsif role_formatted == "Professor"
+                    Professor.new( character["name"], role_formatted, character["house"] ) 
+                else
+                    Character.new( character["name"], role_formatted, character["house"] ) 
+                end
+            end
+        }
     end
 end

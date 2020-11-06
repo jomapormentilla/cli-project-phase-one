@@ -8,8 +8,16 @@ class Student < Character
     # Can earn and lose house points
     # Can be expelled
 
-    def learn_spell( spell )
+    def self.all
+        @@all.select{ |character| character.role == "Student" }
+    end
 
+    def learn_spell( spell )
+        @spells << spell
+    end
+
+    def create_spell( name, type=nil, effect )
+        Spell.new( name, type, effect )
     end
 
     def add_friend( character )

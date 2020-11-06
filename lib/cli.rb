@@ -3,15 +3,16 @@
 # Connects our files together
 
 class Cli
-    attr_accessor :name
+    attr_accessor :name, :house
 
     def initialize
         puts "Welcome to Hogwarts! What's your name?"
+        sorting_hat
         input_name
 
         puts "Hello, #{ @name }! The Sorting Hat has placed you in..."
         sleep(1)
-        puts "#{ sorting_hat.upcase }!"
+        puts "#{ @house.upcase }!"
 
         binding.pry
     end
@@ -23,16 +24,16 @@ class Cli
             @name = name
             add_student
         else
-            puts "I can assure you that you are NOT invisible! Please enter a valid name:"
+            puts "I can assure you that you are NOT invisible! You will learn that spell in your 2nd week :) \nPlease enter a valid name:"
             input_name
         end
     end
 
     def sorting_hat
-        House.all.collect{ |house| house.name }.sample
+        @house = House.all.collect{ |house| house.name }.sample
     end
 
     def add_student
-        Student.new( @name, "student", sorting_hat )
+        Student.new( @name, "Student", @house )
     end
 end

@@ -6,6 +6,7 @@ class Character
     def initialize( name, role, house=nil )
         @name = name
         @role = role
+        @spells = []
 
         self.house=( house )
         
@@ -14,6 +15,10 @@ class Character
     
     def self.all
         @@all
+    end
+
+    def role=( role )
+        
     end
     
     def house=( house )
