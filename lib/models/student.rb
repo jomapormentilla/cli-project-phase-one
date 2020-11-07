@@ -1,4 +1,4 @@
-class Student < Character
+class Student < Wizard
     attr_accessor :friends, :enemies, :status
 
     # The User will insantiate as a new Student
@@ -20,12 +20,18 @@ class Student < Character
         Spell.new( name, type, effect )
     end
 
-    def add_friend( character )
-
+    def add_friend( wizard )
+        if @enemies.detect{ |name| name == wizard }
+            @enemies.delete( wizard )
+        end
+        @friends << wizard
     end
 
-    def add_enemy( character )
-
+    def add_enemy( wizard )
+        if @friends.detect{ |name| name == wizard }
+            @friends.delete( wizard )
+        end
+        @enemies << wizard
     end
 
     def earn_points
@@ -34,5 +40,9 @@ class Student < Character
 
     def lose_points
 
+    end
+
+    def list_housemates
+        @@all.select{ |student| student.house == self.info.house }
     end
 end

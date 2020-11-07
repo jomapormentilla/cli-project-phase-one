@@ -43,7 +43,7 @@ class API
                 elsif role_formatted == "Professor"
                     Professor.new( character["name"], role_formatted, character["house"] ) 
                 else
-                    Character.new( character["name"], role_formatted, character["house"] ) 
+                    Wizard.new( character["name"], role_formatted, character["house"] ) 
                 end
             end
         }

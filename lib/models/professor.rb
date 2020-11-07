@@ -1,4 +1,4 @@
-class Professor < Character
+class Professor < Wizard
     # Can teach spells
 
     def self.all

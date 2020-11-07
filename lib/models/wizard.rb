@@ -1,12 +1,14 @@
-class Character
+class Wizard
     attr_accessor :name, :role, :house, :spells
 
     @@all = []
 
-    def initialize( name, role, house=nil )
+    def initialize( name, role, house="Unknown" )
         @name = name
         @role = role
         @spells = []
+        @friends = []
+        @enemies = []
 
         self.house=( house )
         
