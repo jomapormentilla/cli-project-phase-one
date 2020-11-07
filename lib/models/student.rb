@@ -12,14 +12,6 @@ class Student < Wizard
         @@all.select{ |character| character.role == "Student" }
     end
 
-    def learn_spell( spell )
-        @spells << spell
-    end
-
-    def create_spell( name, type=nil, effect )
-        Spell.new( name, type, effect )
-    end
-
     def add_friend( wizard )
         if @enemies.detect{ |name| name == wizard }
             @enemies.delete( wizard )

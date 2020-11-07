@@ -1,5 +1,6 @@
 class Wizard
     extend Findable::ClassMethods
+    include Findable::InstanceMethods
     
     attr_accessor :name, :role, :house, :spells
 
@@ -19,10 +20,6 @@ class Wizard
     
     def self.all
         @@all
-    end
-
-    def role=( role )
-        
     end
     
     def house=( house )
