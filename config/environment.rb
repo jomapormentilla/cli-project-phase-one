@@ -4,6 +4,9 @@ Bundler.require     # Requires ALL Gems listed in the Gemfile
 require_relative '../lib/api'
 require_relative '../lib/cli'
 
+# Concerns / Modules
+require_relative '../lib/concerns/findable'
+
 # Models
 require_relative '../lib/models/spell'
 require_relative '../lib/models/house'

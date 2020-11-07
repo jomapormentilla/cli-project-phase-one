@@ -1,4 +1,6 @@
 class Wizard
+    extend Findable::ClassMethods
+    
     attr_accessor :name, :role, :house, :spells
 
     @@all = []

@@ -1,4 +1,6 @@
 class House
+    extend Findable::ClassMethods
+
     attr_accessor :name, :mascot, :founder, :head_master, :house_points
 
     @@all = []
@@ -19,5 +21,9 @@ class House
 
     def add_character( character )
         character.house = self
+    end
+
+    def house_points=( house_points )
+        @house_points += house_points
     end
 end
