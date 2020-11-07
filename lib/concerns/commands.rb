@@ -9,7 +9,8 @@ module Commands
                 "Meet my Professor",
                 "Meet my Housemates",
                 "Learn about the other Houses",
-                "Learn a spell"
+                "Learn a spell",
+                "Look up a Wizard"
             ]
         end
 
@@ -27,9 +28,9 @@ module Commands
             puts "      #{ @house.upcase }!\n"
         end
 
-        def stage_one
+        def level_one_commands
             get_commands
-            puts "\n    What would you like to do next?"
+            puts "\n    What would you like to do next? [Type 'vanish' to exit]"
             
             # Display available commands
             @commands.each.with_index do |command, index|
@@ -42,16 +43,48 @@ module Commands
             # Controller
             case input
             when 1
-                puts "Your professor is..."
+                puts "      List all Professors"
             when 2
-                puts "Your housemates are..."
+                puts "      List all Students"
             when 3
-                puts "The other houses are..."
+                puts "      List only Students in your House"
             when 4
-                puts "Which spell would you like to learn"
+                puts "      List all available Spells"
+            when 5
+                puts "      Who would you like to find?"
+                search = find_wizard
+                binding.pry
+            when "vanish"
+                exit
             else
                 puts "Invalid Selection."
-                stage_one   # Ask for input again
+                level_one_commands   # Ask for input again
+            end
+        end
+
+        def find_wizard
+            input = gets.strip
+            result = Wizard.find_by_name( input )
+
+            if result == nil
+                puts "      Sorry, it seems #{ input } does not exist! Try another name:"
+                find_wizard
+            else
+                puts "      #{ result.name } is a #{ result.role } from House #{ result.house.name }."
+                friend_wizard( result )
+            end
+        end
+
+        def friend_wizard( wizard )
+            puts "      Would you like to add #{ wizard.name } as a friend? ( Y | N )"
+            
+            input = gets.strip
+            if input == "Y"
+                puts "      Great! You are now friends with #{ wizard.name }!"
+                self.info.add_friend( wizard )
+            elsif input == "N"
+                puts "      Uh oh, you have upset #{ wizard.name }! You are now enemies."
+                self.info.add_enemy( wizard )
             end
         end
         

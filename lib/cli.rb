@@ -8,6 +8,6 @@ class Cli
 
     def initialize
         start
-        stage_one
+        level_one_commands
     end
 end

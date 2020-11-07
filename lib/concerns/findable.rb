@@ -18,5 +18,9 @@ module Findable
             self.spells << new_spell
             self.spells.collect{ |spell| spell.name }   # return an array of Spells that this particular instance owns
         end
+
+        def list_spells
+            self.spells.collect{ |spell| spell.name }
+        end
     end
 end
