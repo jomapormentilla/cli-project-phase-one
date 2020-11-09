@@ -9,6 +9,6 @@ class Cli
     def initialize
         @history = []
         start
-        level_one_commands
+        main_menu
     end
 end

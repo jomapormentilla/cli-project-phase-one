@@ -38,6 +38,11 @@ module Commands
                     method: 'view_spells'   
                 },
                 {
+                    title: "Learn a new spell",
+                    cmd: 'learn', 
+                    method: 'learn_spell'   
+                },
+                {
                     title: "List only Students in your House",
                     cmd: 'housemates', 
                     method: 'list_students'  
@@ -81,6 +86,7 @@ module Commands
             
             # Display available commands
             @commands.each do |command|
+                # Aligns the Command Titles in the CLI
                 buffer = 15 - command[:cmd].split("").length
                 arr = Array.new(buffer, " ").join("")
                 
@@ -96,8 +102,8 @@ module Commands
 
             welcome_banner
             if find_cmd != nil
-                puts "=> #{ input }\n\n"
-                self.send(find_cmd[:method])
+                puts "=> #{ input }\n\n"            # Show the user's input
+                self.send(find_cmd[:method])        # Run associated method
             else
                 puts "=> Invalid Selection.\n"
             end
@@ -150,9 +156,11 @@ module Commands
             if input == "y"
                 puts "\n=> Great! You are now friends with #{ wizard.name }!"
                 self.info.add_friend( wizard )
+                @history << "Became friends with #{ wizard.name }."
             elsif input == "n"
                 puts "\n=> Uh oh, you have upset #{ wizard.name }! You are now enemies."
                 self.info.add_enemy( wizard )
+                @history << "Became enemies with #{ wizard.name }."
             end
         end
 
@@ -182,6 +190,23 @@ module Commands
                 puts "\n=> You don't know any spells.\n"
             else
                 my_spells.each.with_index(1){ |spell, index| puts "#{ index }. #{ spell }" }
+            end
+        end
+
+        def learn_spell
+            all_spells = Spell.all.collect.with_index(1){ |spell, index| puts "#{ index }. #{ spell.name }" }
+            
+            puts "Which spell would you like to learn?"
+            input = gets.strip.to_i
+            if input.between?(0, all_spells.length)
+                new_spell = Spell.all[input-1]
+                self.info.learn_spell( new_spell )
+                puts "Congratulations! You have learned #{ new_spell.name }!"
+                @history << "Learned #{ new_spell.name }!"
+            else
+                welcome_banner
+                puts "=> Invalid Selection"
+                learn_spell
             end
         end
         
@@ -226,9 +251,11 @@ module Commands
         end
 
         def exit_application
-            puts "\nBefore you go, here is a summary of your experience at Hogwarts:\n"
-            puts "      [ List User History ]\n\n"
-            puts "See you again soon, #{ self.info.name }!"
+            puts "Before you go, here is a summary of your experience at Hogwarts:\n\n"
+            @history.each do |event|
+                puts "- #{ event }"
+            end
+            puts "\n=> See you again soon, #{ self.info.name }!\n\n"
             exit!
         end
     end
