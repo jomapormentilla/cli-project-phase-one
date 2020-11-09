@@ -4,21 +4,6 @@ module Commands
     end
 
     module InstanceMethods
-        def get_commands
-            @commands = [
-                "List all Professors",
-                "List all Students",
-                "List only Students in your House",
-                "List all available Spells",
-                "Look up a Wizard",
-                "View a list of your Friends",
-                "View a list of your Enemies",
-                "View your Wizard ID Card",
-                "Binding Pry",
-                "Leave Hogwarts"
-            ]
-        end
-
         def start
             welcome_banner
             puts "What's your name? \n"
@@ -28,83 +13,98 @@ module Commands
             puts "\nHello, #{ @name }! Your journey begins with The Sorting Hat.\n"
             sleep(1)
             puts "Let's see which House you belong to...\n\n"
-            sleep(3)
+            # sleep(3)
             puts "... #{ @house.upcase }!\n"
             sleep(1)
+
+            get_commands
+        end
+        
+        def get_commands
+            @commands = [
+                {
+                    title: "List all Professors",
+                    cmd: 'professors',
+                    method: 'list_professors'
+                },
+                {
+                    title: "List all Students",
+                    cmd: 'students',
+                    method: 'list_students'
+                },
+                {
+                    title: "List all available Spells",
+                    cmd: 'spells', 
+                    method: 'view_spells'   
+                },
+                {
+                    title: "List only Students in your House",
+                    cmd: 'housemates', 
+                    method: 'list_students'  
+                },
+                {
+                    title: "Look up a Wizard",
+                    cmd: 'find', 
+                    method: 'find_wizard'  
+                },
+                {
+                    title: "View a list of your Friends",
+                    cmd: 'friends', 
+                    method: 'view_friends'  
+                },
+                {
+                    title: "View a list of your Enemies",
+                    cmd: 'enemies', 
+                    method: 'view_enemies'  
+                },
+                {
+                    title: "View your Wizard ID Card",
+                    cmd: 'profile', 
+                    method: 'view_profile'  
+                },
+                {
+                    title: "Binding Pry",
+                    cmd: 'pry',
+                    method: 'use_pry'
+                },
+                {
+                    title: "Leave Hogwarts",
+                    cmd: 'quit',
+                    method: 'exit_application'  
+                }
+            ]
         end
 
-        def level_one_commands
-            get_commands
-            puts "\nWhat would you like to do next, #{ self.info.name }?"
-            puts "Enter '0' at anytime to return to this menu \n\n"
+        def main_menu
+            puts "\n"
+            puts "What would you like to do next, #{ self.info.name }?\n\n"
             
             # Display available commands
-            @commands.each.with_index(1) do |command, index|
-                puts "#{ index }. #{ command }"
+            @commands.each do |command|
+                buffer = 15 - command[:cmd].split("").length
+                arr = Array.new(buffer, " ").join("")
+                
+                puts "`#{ command[:cmd] }` #{ arr } - #{ command[:title] }"
             end
             puts "\n"
     
             # Get user input
-            input = gets.strip.to_i
-            puts "\n"
-                
-            # until input = @commands.length do
-            #     case input                     
-            # end
+            input = gets.strip
             
-            # obj.send('upcase') == obj.upcase
-            # obj.send('method_name') == obj.method_name
-            
-            # Controller
-            # case input
-            #     @commands.each.with_index(1) do |command, index|
-            #         when index
-            #             welcome_banner
-            #             command[:method]
-            #     end
-            # end
+            # Does this command exist
+            find_cmd = @commands.detect{ |command| command[:cmd] == input }
 
-            case input
-            when 0
-                welcome_banner
-                level_one_commands
-            when 1
-                welcome_banner
-                list_professors
-            when 2
-                welcome_banner
-                list_students
-            when 3
-                puts "List only Students in your House"
-            when 4
-                welcome_banner
-                view_spells
-            when 5
-                welcome_banner
-                find_wizard
-            when 6
-                welcome_banner
-                puts "\n#{ self.info.name }'s friends:\n"
-                view_friends
-            when 7
-                welcome_banner
-                view_enemies
-            when 8
-                welcome_banner
-                view_profile
-            when 9
-                welcome_banner
-                binding.pry
-            when @commands.length
-                welcome_banner
-                exit_application
+            welcome_banner
+            if find_cmd != nil
+                puts "=> #{ input }\n\n"
+                self.send(find_cmd[:method])
             else
-                welcome_banner
-                puts "Invalid Selection."
+                puts "=> Invalid Selection.\n"
             end
 
-            sleep(2)
-            level_one_commands
+            # Return to main menu
+            sleep(1)
+            main_menu
         end
 
         def list_professors
@@ -115,9 +115,6 @@ module Commands
         def list_students
             puts "Hogwarts Students:\n"
             Student.all.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
-
-            input = gets.strip
-
         end
 
         def view_profile
@@ -128,7 +125,7 @@ module Commands
         end
 
         def find_wizard
-            puts "\nPlease enter the full name of the Wizard you would like to find:\n\n"
+            puts "Please enter the First, Last, or Full Name of the Wizard you would like to find: \n\n"
             input = gets.strip
             result = Wizard.find_by_first_or_last_name( input )
 
@@ -136,7 +133,7 @@ module Commands
                 puts "\n=> Sorry, it seems #{ input } does not go to Hogwarts! Try searching a different name:"
                 find_wizard
             elsif input == "0"
-                level_one_commands
+                main_menu
             elsif input == self.info.name
                 puts "\n=> Last we checked, there is only ONE of you. Try searching for another wizard."
                 find_wizard
@@ -147,7 +144,7 @@ module Commands
         end
 
         def friend_wizard( wizard )
-            puts "\nWould you like to add #{ wizard.name } as a friend? (y/n)"
+            puts "Would you like to add #{ wizard.name } as a friend? (y/n)"
             
             input = gets.strip
             if input == "y"
@@ -169,7 +166,7 @@ module Commands
         end
 
         def view_enemies
-            puts "\n#{ self.info.name }'s enemies:\n"
+            puts "#{ self.info.name }'s enemies:\n"
             my_enemies = self.info.enemies
             if my_enemies == []
                 puts "\n=> You don't have any enemies.\n"
@@ -179,7 +176,7 @@ module Commands
         end
 
         def view_spells
-            puts "\nHere are all the spells you currently know:\n"
+            puts "Here are all the spells you currently know:\n"
             my_spells = self.info.list_spells
             if my_spells == []
                 puts "\n=> You don't know any spells.\n"
@@ -207,6 +204,10 @@ module Commands
         def add_student
             self.info = Student.new( @name, "Student", @house )
         end
+
+        def use_pry
+            binding.pry
+        end
     
         def welcome_banner
             print "\e[2J\e[f"
@@ -225,10 +226,9 @@ module Commands
         end
 
         def exit_application
-            puts "\nWonderful having you here, #{ self.info.name }!"
-            puts "Before you go, here is a summary of your experience at Hogwarts:"
-            puts "      [ List User History ]\n"
-            puts "We hope you enjoyed your stay!\n\n"
+            puts "\nBefore you go, here is a summary of your experience at Hogwarts:\n"
+            puts "      [ List User History ]\n\n"
+            puts "See you again soon, #{ self.info.name }!"
             exit!
         end
     end

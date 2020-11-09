@@ -42,7 +42,7 @@ module Findable
             new_spell = Spell.new( name, type, effect, self )
             new_spell.owner = self
             self.spells << new_spell
-            self.spells.collect{ |spell| spell.name }   # return an array of Spells that this particular instance owns
+            list_spells
         end
 
         def list_spells
