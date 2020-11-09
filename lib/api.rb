@@ -39,11 +39,14 @@ class API
         if character["role"] != nil
                 role_formatted = character["role"].split(", ")[0].capitalize
                 if role_formatted == "Student"
-                    Student.new( character["name"], role_formatted, character["house"] )
+                    student = Student.new( character["name"], role_formatted, character["house"] )
+                    student.learn_spell( Spell.all.sample )     # Learns a random spell on initialization
                 elsif role_formatted == "Professor"
-                    Professor.new( character["name"], role_formatted, character["house"] ) 
+                    professor = Professor.new( character["name"], role_formatted, character["house"] ) 
+                    professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
                 else
-                    Wizard.new( character["name"], role_formatted, character["house"] ) 
+                    wizard = Wizard.new( character["name"], role_formatted, character["house"] ) 
+                    wizard.learn_spell( Spell.all.sample )      # Learns a random spell on initialization
                 end
             end
         }

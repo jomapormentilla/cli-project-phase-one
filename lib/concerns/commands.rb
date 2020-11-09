@@ -10,11 +10,11 @@ module Commands
             sorting_hat
             input_name
 
-            puts "\nHello, #{ @name }! Your journey begins with The Sorting Hat.\n"
+            puts "\nHello, #{ self.info.name }! Your journey begins with The Sorting Hat.\n"
             sleep(1)
             puts "Let's see which House you belong to...\n\n"
             # sleep(3)
-            puts "... #{ @house.upcase }!\n"
+            puts "... #{ self.info.house.name }!\n"
             sleep(1)
 
             get_commands
@@ -184,12 +184,16 @@ module Commands
         end
 
         def view_spells
-            puts "Here are all the spells you currently know:\n"
-            my_spells = self.info.list_spells
-            if my_spells == []
+            puts "Here are all the spells you currently know:\n\n"
+            
+            if self.info.spells == []
                 puts "\n=> You don't know any spells.\n"
             else
-                my_spells.each.with_index(1){ |spell, index| puts "#{ index }. #{ spell }" }
+                self.info.spells.each{ |spell| 
+                    puts "  Name: #{ spell.name }" 
+                    puts "  Type: #{ spell.type }"
+                    puts "Effect: #{ spell.effect.split.map(&:capitalize).join(" ") } \n\n"
+                }
             end
         end
 
@@ -201,7 +205,7 @@ module Commands
             if input.between?(0, all_spells.length)
                 new_spell = Spell.all[input-1]
                 self.info.learn_spell( new_spell )
-                puts "Congratulations! You have learned #{ new_spell.name }!"
+                puts "\n=> Congratulations! You have learned #{ new_spell.name }!"
                 @history << "Learned #{ new_spell.name }!"
             else
                 welcome_banner
@@ -215,7 +219,7 @@ module Commands
             
             if name != ""
                 @name = name
-                add_student
+                self.info = Student.new( @name, "Student", @house )
             else
                 puts "=> I can assure you that you are NOT invisible! You will learn that spell in your 2nd week :) \nPlease enter a valid name:"
                 input_name
@@ -224,10 +228,6 @@ module Commands
     
         def sorting_hat
             @house = House.all.collect{ |house| house.name }.sample
-        end
-    
-        def add_student
-            self.info = Student.new( @name, "Student", @house )
         end
 
         def use_pry
