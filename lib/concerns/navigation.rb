@@ -176,7 +176,8 @@ module Navigation
         def profile_options
             options = [
                 "Main Menu",
-                "Your Profile",
+                "Profile",
+                "Spells",
                 "Friends",
                 "Enemies",
             ]
