@@ -2,6 +2,8 @@ require 'bundler'
 Bundler.require     # Requires ALL Gems listed in the Gemfile
 
 # CONCERNS / MODULES
+require_relative '../lib/concerns/clistrict'
+require_relative '../lib/concerns/navigation'
 require_relative '../lib/concerns/commands'
 require_relative '../lib/concerns/findable'
 

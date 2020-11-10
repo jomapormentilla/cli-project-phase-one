@@ -3,7 +3,10 @@
 # Connects our files together
 
 class Cli
+    include Clistrict::InstanceMethods
+    include Navigation::InstanceMethods
     include Commands::InstanceMethods
+    
     attr_accessor :name, :house, :info, :commands, :history
 
     def initialize
