@@ -11,27 +11,27 @@ module Navigation
                     method: 'list_houses'   
                 },
                 {
-                    title: "List all Professors",
+                    title: "Professors >>",
                     cmd: 'professors',
                     method: 'professor_options'
                 },
                 {
-                    title: "List all Students",
+                    title: "Students >>",
                     cmd: 'students',
                     method: 'student_options'
                 },
                 {
-                    title: "List all available Spells",
+                    title: "Spells >>",
                     cmd: 'spells', 
                     method: 'spell_options'   
                 },
                 {
-                    title: "View your Wizard ID Card",
+                    title: "Profile >>",
                     cmd: 'profile', 
                     method: 'profile_options'  
                 },
                 {
-                    title: "Search",
+                    title: "Search >>",
                     cmd: 'search', 
                     method: 'search_options'  
                 },

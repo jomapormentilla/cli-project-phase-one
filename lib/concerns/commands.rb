@@ -95,19 +95,20 @@ module Commands
             input = gets.strip
             result = Spell.find_spell_by_first_or_last_name( input )
 
-
             if input == "" || result == nil
-                puts "\n=> Sorry, it seems #{ input } is not a valid Spell! Try searching a different name:"
+                puts "\n=> Sorry, it seems #{ input } is not a valid Spell! Try searching a different name."
                 find_spell
             elsif input == "0"
                 main_menu
             else
                 puts "\n=> Found: #{ result.name }. Effect: #{ result.effect }"
+                puts "Would you like to learn #{ result.name }? (y/n)"
+                
+                if gets.strip == "y"
+                    self.info.learn_spell( result )
+                end
             end
-            
-            puts "Would you like to learn #{ result.name }? (y/n)"
 
-            gets.strip == "y" ? self.info.learn_spell( result ) : nil
         end
 
         def view_spells
