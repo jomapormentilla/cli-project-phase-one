@@ -1,13 +1,6 @@
 class Student < Wizard
     attr_accessor :friends, :enemies, :status
 
-    # The User will insantiate as a new Student
-    # Knows which house they belong to
-    # Can make friends
-    # Can make enemies
-    # Can earn and lose house points
-    # Can be expelled
-
     def self.all
         @@all.select{ |character| character.role == "Student" }
     end

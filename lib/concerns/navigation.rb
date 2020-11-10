@@ -7,17 +7,17 @@ module Navigation
             @commands = [
                 {
                     title: "Information about all Houses",
-                    cmd: 'house', 
+                    cmd: 'houses', 
                     method: 'list_houses'   
                 },
                 {
                     title: "List all Professors",
-                    cmd: 'professor',
+                    cmd: 'professors',
                     method: 'professor_options'
                 },
                 {
                     title: "List all Students",
-                    cmd: 'student',
+                    cmd: 'students',
                     method: 'student_options'
                 },
                 {
@@ -57,6 +57,7 @@ module Navigation
                 
                 puts "      `#{ command[:cmd] }` #{ arr } - #{ command[:title] }"
             end
+            
             puts "\n"
             input = gets.strip
             find_cmd = @commands.detect{ |command| command[:cmd] == input }
@@ -66,10 +67,10 @@ module Navigation
                 puts "=> #{ input }\n\n"
                 self.send(find_cmd[:method])
             else
-                puts "=> Invalid Selection.\n"
+                puts "=> Invalid Selection: '#{ input }'\n"
             end
 
-            sleep(1)
+            # sleep(1)
             main_menu
         end
 
@@ -123,7 +124,7 @@ module Navigation
             when "0"
                 main_menu
             when "1"
-                list_studets
+                list_students
             when "2"
                 puts "Implement This."
             when "3"
@@ -137,9 +138,11 @@ module Navigation
         def spell_options
             options = [
                 "Main Menu",
-                "List Alphabetically",
+                "Learn a Spell",
                 "Create a Spell",
                 "Teach a Spell",
+                "Spells You Know",
+                "Search for a Spell",
                 "Most Popular"
             ]
 
@@ -159,10 +162,14 @@ module Navigation
             when "3"
                 teach_spell
             when "4"
+                view_spells
+            when "5"
+                find_spell
+            when "6"
                 puts "Implement This."
             else
                 puts "=> Invalid Selection\n\n"
-                professor_options
+                spell_options
             end
         end
 
@@ -170,7 +177,6 @@ module Navigation
             options = [
                 "Main Menu",
                 "Your Profile",
-                "Your Spells",
                 "Friends",
                 "Enemies",
             ]
@@ -191,10 +197,10 @@ module Navigation
             when "3"
                 view_friends
             when "4"
-                view_eemies
+                view_enemies
             else
                 puts "=> Invalid Selection\n\n"
-                professor_options
+                profile_options
             end
         end
 
@@ -220,10 +226,10 @@ module Navigation
             when "2"
                 find_wizard
             when "3"
-                puts "Implement This."
+                find_spell
             else
                 puts "=> Invalid Selection\n\n"
-                professor_options
+                search_options
             end
         end
     end

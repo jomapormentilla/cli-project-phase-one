@@ -12,8 +12,8 @@ module Clistrict
             puts "\nYou're a wizard, #{ self.info.name }! Your journey begins with The Sorting Hat.\n"
             sleep(1)
             puts "Let's see which House you belong to...\n\n"
-            # sleep(3)
-            puts "... #{ self.info.house.name }!\n"
+            sleep(2)
+            puts "... #{ self.info.house.name.upcase }!\n"
             sleep(1)
 
             get_commands

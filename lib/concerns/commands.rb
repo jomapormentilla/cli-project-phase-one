@@ -6,9 +6,9 @@ module Commands
         def view_profile
             puts "           NAME: #{ self.info.name }"
             puts "          HOUSE: #{ self.info.house.name }"
-            puts "         SPELLS: #{ self.info.spells.length }"
-            puts "        FRIENDS: #{ self.info.friends.length }"
-            puts "        ENEMIES: #{ self.info.enemies.length }"
+            puts "         SPELLS: #{ self.info.spells.uniq.length }"
+            puts "        FRIENDS: #{ self.info.friends.uniq.length }"
+            puts "        ENEMIES: #{ self.info.enemies.uniq.length }"
             puts "  POINTS EARNED: #{ self.info.house.house_points }"
         end
 
@@ -32,12 +32,12 @@ module Commands
         end
 
         def list_professors
-            puts "Hogwarts Professors:\n"
+            puts "  Hogwarts Professors:\n"
             Professor.all.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
         end
 
         def list_students
-            puts "Hogwarts Students:\n"
+            puts "  Hogwarts Students:\n"
             Student.all.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
         end
 
@@ -90,18 +90,38 @@ module Commands
             add_to_history( output )
         end
 
+        def find_spell
+            puts "Please enter the name of a spell: \n\n"
+            input = gets.strip
+            result = Spell.find_spell_by_first_or_last_name( input )
+
+
+            if input == "" || result == nil
+                puts "\n=> Sorry, it seems #{ input } is not a valid Spell! Try searching a different name:"
+                find_spell
+            elsif input == "0"
+                main_menu
+            else
+                puts "\n=> Found: #{ result.name }. Effect: #{ result.effect }"
+            end
+            
+            puts "Would you like to learn #{ result.name }? (y/n)"
+
+            gets.strip == "y" ? self.info.learn_spell( result ) : nil
+        end
+
         def view_spells
             puts "Here are all the spells you currently know:\n\n"
             
             if self.info.spells == []
                 puts "\n=> You don't know any spells.\n"
             else
-                self.info.spells.each{ |spell| 
+                self.info.spells.uniq.each{ |spell| 
                     puts "    Name: #{ spell.name }" 
                     puts "    Type: #{ spell.type }"
                     puts "  Effect: #{ spell.effect.split.map(&:capitalize).join(" ") }"
 
-                    wizards_who_know_this = spell.owner.collect{ |owner| owner.name }
+                    wizards_who_know_this = spell.owner.uniq.collect{ |owner| owner.name }
                     puts "Owned By: #{ wizards_who_know_this.join(", ") }\n\n"
                 }
             end

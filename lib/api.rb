@@ -1,5 +1,3 @@
-# Class method, responsible for talking with our API
-
 class API
     attr_reader :url_base, :api_key
 

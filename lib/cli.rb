@@ -1,7 +1,3 @@
-# Command line interface
-# Interacts with the user
-# Connects our files together
-
 class Cli
     include Clistrict::InstanceMethods
     include Navigation::InstanceMethods
