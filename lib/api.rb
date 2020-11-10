@@ -25,7 +25,7 @@ class API
 
     def get_spells
         spells = get_data("spells").uniq
-        spells.each.with_index{ |spell, index| Spell.new( index, spell["spell"], spell["type"], spell["effect"] ) }
+        spells.each{ |spell| Spell.new( spell["spell"], spell["type"], spell["effect"] ) }
     end
     
     def get_houses

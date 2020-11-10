@@ -48,5 +48,9 @@ module Findable
         def list_spells
             self.spells.collect{ |spell| spell.name }
         end
+
+        def teach_spell( spell, student )
+            student.learn( spell )
+        end
     end
 end

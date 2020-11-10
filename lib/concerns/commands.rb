@@ -23,6 +23,11 @@ module Commands
         def get_commands
             @commands = [
                 {
+                    title: "Houses Information",
+                    cmd: 'house-info', 
+                    method: 'view_houses'   
+                },
+                {
                     title: "List all Professors",
                     cmd: 'professors',
                     method: 'list_professors'
@@ -34,18 +39,18 @@ module Commands
                 },
                 {
                     title: "List all available Spells",
-                    cmd: 'spells', 
+                    cmd: 'my-spells', 
                     method: 'view_spells'   
                 },
                 {
                     title: "Learn a new spell",
-                    cmd: 'learn', 
+                    cmd: 'learn-spell', 
                     method: 'learn_spell'   
                 },
                 {
-                    title: "List only Students in your House",
-                    cmd: 'housemates', 
-                    method: 'list_students'  
+                    title: "Create a new spell",
+                    cmd: 'create-spell', 
+                    method: 'create_spell'   
                 },
                 {
                     title: "Look up a Wizard",
@@ -81,34 +86,26 @@ module Commands
         end
 
         def main_menu
-            puts "\n"
-            puts "What would you like to do next, #{ self.info.name }?\n\n"
+            puts "\nWhat would you like to do next, #{ self.info.name }?\n\n"
             
-            # Display available commands
             @commands.each do |command|
-                # Aligns the Command Titles in the CLI
                 buffer = 15 - command[:cmd].split("").length
                 arr = Array.new(buffer, " ").join("")
                 
-                puts "`#{ command[:cmd] }` #{ arr } - #{ command[:title] }"
+                puts "      `#{ command[:cmd] }` #{ arr } - #{ command[:title] }"
             end
             puts "\n"
-    
-            # Get user input
             input = gets.strip
-            
-            # Does this command exist
             find_cmd = @commands.detect{ |command| command[:cmd] == input }
 
             welcome_banner
             if find_cmd != nil
-                puts "=> #{ input }\n\n"            # Show the user's input
-                self.send(find_cmd[:method])        # Run associated method
+                puts "=> #{ input }\n\n"
+                self.send(find_cmd[:method])
             else
                 puts "=> Invalid Selection.\n"
             end
 
-            # Return to main menu
             sleep(1)
             main_menu
         end
@@ -123,11 +120,23 @@ module Commands
             Student.all.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
         end
 
+        def view_houses
+            House.all.each.with_index(1) do |house, index|
+                puts "#{ index }. #{ house.name.upcase }"
+                puts "   Founder: #{ house.founder }"
+                puts "   Head Master: #{ house.head_master }"
+                puts "   Mascot: #{ house.mascot.capitalize }"
+                puts "   House Points: #{ house.house_points }\n\n"
+            end
+        end
+
         def view_profile
-            puts "   NAME: #{ self.info.name }"
-            puts "  HOUSE: #{ self.info.house.name }"
-            puts "FRIENDS: "
-            puts "          #{ view_friends }"
+            puts "           NAME: #{ self.info.name }"
+            puts "          HOUSE: #{ self.info.house.name }"
+            puts "         SPELLS: #{ self.info.spells.length }"
+            puts "        FRIENDS: #{ self.info.friends.length }"
+            puts "        ENEMIES: #{ self.info.enemies.length }"
+            puts "  POINTS EARNED: #{ self.info.house.house_points }"
         end
 
         def find_wizard
@@ -144,7 +153,11 @@ module Commands
                 puts "\n=> Last we checked, there is only ONE of you. Try searching for another wizard."
                 find_wizard
             else
-                puts "\n=> #{ result.name } is a #{ result.role } from House #{ result.house.name }."
+                if result.house != nil
+                    puts "\n=> #{ result.name } is a #{ result.role } from House #{ result.house.name }."
+                else
+                    puts "\n=> #{ result.name } is a #{ result.role }."
+                end
                 friend_wizard( result )
             end
         end
@@ -190,9 +203,12 @@ module Commands
                 puts "\n=> You don't know any spells.\n"
             else
                 self.info.spells.each{ |spell| 
-                    puts "  Name: #{ spell.name }" 
-                    puts "  Type: #{ spell.type }"
-                    puts "Effect: #{ spell.effect.split.map(&:capitalize).join(" ") } \n\n"
+                    puts "    Name: #{ spell.name }" 
+                    puts "    Type: #{ spell.type }"
+                    puts "  Effect: #{ spell.effect.split.map(&:capitalize).join(" ") }"
+
+                    wizards_who_know_this = spell.owner.collect{ |owner| owner.name }
+                    puts "Owned By: #{ wizards_who_know_this.join(", ") }\n\n"
                 }
             end
         end
@@ -213,6 +229,21 @@ module Commands
                 learn_spell
             end
         end
+
+        def create_spell
+            result = []
+            puts "What would you like to name this spell?"
+            result << gets.strip
+
+            puts "What are the effects of this spell?"
+            result << gets.strip
+
+            new_spell = Spell.new( result[0], 'Spell', result[1], self )
+            new_spell.owner = self.info
+            self.info.spells << new_spell
+
+            puts "Congratulations! You created #{ result[0] }.\n\n"
+        end
         
         def input_name
             name = gets.strip
@@ -221,7 +252,7 @@ module Commands
                 @name = name
                 self.info = Student.new( @name, "Student", @house )
             else
-                puts "=> I can assure you that you are NOT invisible! You will learn that spell in your 2nd week :) \nPlease enter a valid name:"
+                puts "=> I assure you that you are NOT invisible! You will learn that spell soon. \nPlease enter a valid name:"
                 input_name
             end
         end
@@ -251,7 +282,7 @@ module Commands
         end
 
         def exit_application
-            puts "Before you go, here is a summary of your experience at Hogwarts:\n\n"
+            puts "Before you go, here is a transcript of your experience at Hogwarts:\n\n"
             @history.each do |event|
                 puts "- #{ event }"
             end
