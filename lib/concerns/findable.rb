@@ -11,54 +11,25 @@ module Findable
             }
 
             find_name = name_arr.select{ |data|
-                if data[0].class != NilClass
-                    data[0].downcase == input.downcase
-                elsif data[0].class != NilClass && data[1].class != NilClass
-                    data[0].downcase == input.downcase || data[1].downcase == input.downcase
+                if data[0].class != NilClass && data[1].class != NilClass
+                    input.downcase == data[0].downcase || input.downcase == data[1].downcase
+                elsif data[0].class != NilClass
+                    input.downcase == data[0].downcase
                 end
             }
-
+            
             if find_name.size == 1
                 self.find_by_name( find_name[0].join(" ") )
             elsif find_name.size > 1
                 puts "Found the following Wizards:"
-                find_name.each.with_index(1) do |wizard, index|
-                    puts "#{ index }. #{ wizard[0] } #{ wizard[1] }"
+                find_name.each.with_index(1) do |data, index|
+                    puts "#{ index }. #{ data[0] } #{ data[1] }"
                 end
 
                 input = gets.strip.to_i
                 if input.between?(0,find_name.length)
-                    wizard = find_name[input-1].join(" ")
-                    self.find_by_name( wizard )
-                end
-            end
-        end
-
-        def find_spell_by_first_or_last_name( input )
-            name_arr = self.all.collect{ |data|
-                data.name.split
-            }
-
-            find_name = name_arr.select{ |data|
-                if data[0].class != NilClass
-                    data[0].downcase == input.downcase
-                elsif data[0].class != NilClass && data[1].class != NilClass
-                    data[0].downcase == input.downcase || data[1].downcase == input.downcase
-                end
-            }
-
-            if find_name.size == 1
-                self.find_by_name( find_name[0].join(" ") )
-            elsif find_name.size > 1
-                puts "Found the following Spells:"
-                find_name.each.with_index(1) do |spell, index|
-                    puts "#{ index }. #{ spell[0] } #{ spell[1] }"
-                end
-
-                input = gets.strip.to_i
-                if input.between?(0,find_name.length)
-                    spell = find_name[input-1].join(" ")
-                    self.find_by_name( spell )
+                    data = find_name[input-1].join(" ")
+                    self.find_by_name( data )
                 end
             end
         end

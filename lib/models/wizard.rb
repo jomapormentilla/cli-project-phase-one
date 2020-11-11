@@ -2,7 +2,7 @@ class Wizard
     extend Findable::ClassMethods
     include Findable::InstanceMethods
     
-    attr_accessor :name, :role, :house, :spells
+    attr_accessor :name, :role, :house, :spells, :friends, :enemies
 
     @@all = []
 

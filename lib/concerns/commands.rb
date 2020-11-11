@@ -3,13 +3,23 @@ module Commands
     end
 
     module InstanceMethods
-        def view_profile
-            puts "           NAME: #{ self.info.name }"
-            puts "          HOUSE: #{ self.info.house.name }"
-            puts "         SPELLS: #{ self.info.spells.uniq.length }"
-            puts "        FRIENDS: #{ self.info.friends.uniq.length }"
-            puts "        ENEMIES: #{ self.info.enemies.uniq.length }"
-            puts "  POINTS EARNED: #{ self.info.house.house_points }"
+        def view_profile( wizard=nil )
+            _wizard = ""
+            _wizard = wizard == nil ? self.info : wizard
+            
+            if _wizard.house.class == NilClass
+                puts "           NAME: #{ _wizard.name }"
+                puts "         SPELLS: #{ _wizard.spells.uniq.length }"
+                puts "        FRIENDS: #{ _wizard.friends.uniq.length }"
+                puts "        ENEMIES: #{ _wizard.enemies.uniq.length }\n\n"
+            else
+                puts "           NAME: #{ _wizard.name }"
+                puts "          HOUSE: #{ _wizard.house.name }"
+                puts "         SPELLS: #{ _wizard.spells.uniq.length }"
+                puts "        FRIENDS: #{ _wizard.friends.uniq.length }"
+                puts "        ENEMIES: #{ _wizard.enemies.uniq.length }"
+                puts "  POINTS EARNED: #{ _wizard.house.house_points }\n\n"
+            end
         end
 
         def view_friends
@@ -33,12 +43,28 @@ module Commands
 
         def list_professors
             puts "  Hogwarts Professors:\n"
-            Professor.all.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
+            all_professors = Professor.all
+            all_professors.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
+
+            puts "\n=> Select a Professor to view their Profile:"
+            input = gets.strip.to_i
+            if input.between?(1,all_professors.length)
+                view_profile( all_professors[input-1] )
+                friend_wizard( all_professors[input-1] )
+            end
         end
 
         def list_students
             puts "  Hogwarts Students:\n"
-            Student.all.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
+            all_students = Student.all
+            all_students.collect.with_index(1){ |wizard, index| puts "     #{ index }. #{ wizard.name }" }
+
+            puts "\n=> Select a Professor to view their Profile:"
+            input = gets.strip.to_i
+            if input.between?(1,all_students.length)
+                view_profile( all_students[input-1] )
+                friend_wizard( all_students[input-1] )
+            end
         end
 
         def list_houses
@@ -93,7 +119,7 @@ module Commands
         def find_spell
             puts "Please enter the name of a spell: \n\n"
             input = gets.strip
-            result = Spell.find_spell_by_first_or_last_name( input )
+            result = Spell.find_by_first_or_last_name( input )
 
             if input == "" || result == nil
                 puts "\n=> Sorry, it seems #{ input } is not a valid Spell! Try searching a different name."
@@ -108,7 +134,6 @@ module Commands
                     self.info.learn_spell( result )
                 end
             end
-
         end
 
         def view_spells

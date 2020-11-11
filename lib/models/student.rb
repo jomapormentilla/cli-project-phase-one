@@ -1,6 +1,4 @@
 class Student < Wizard
-    attr_accessor :friends, :enemies, :status
-
     def self.all
         @@all.select{ |character| character.role == "Student" }
     end

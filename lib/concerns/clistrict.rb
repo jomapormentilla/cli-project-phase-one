@@ -7,7 +7,7 @@ module Clistrict
             welcome_banner
             puts "What's your name? \n"
             sorting_hat
-            input_name
+            get_name
 
             puts "\nYou're a wizard, #{ self.info.name }! Your journey begins with The Sorting Hat.\n"
             sleep(1)
@@ -23,7 +23,7 @@ module Clistrict
             @history << string
         end
 
-        def input_name
+        def get_name
             name = gets.strip
             
             if name != ""
@@ -31,7 +31,7 @@ module Clistrict
                 self.info = Student.new( @name, "Student", @house )
             else
                 puts "=> I assure you that you are NOT invisible! You will learn that spell soon. \nPlease enter a valid name:"
-                input_name
+                get_name
             end
         end
     
