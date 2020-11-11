@@ -67,7 +67,7 @@ module Commands
 
         def list_houses
             House.all.each.with_index(1) do |house, index|
-                house_count = Student.all.select{ |student| student.house != nil && student.house.name == house.name }.count
+                house_count = Wizard.all.select{ |wizard| wizard.house != nil && wizard.house.name == house.name }.count
                 puts "              #{ index }. #{ house.name.upcase }"
                 puts "        Founder: #{ house.founder }"
                 puts "    Head Master: #{ house.head_master }"
@@ -127,8 +127,10 @@ module Commands
             elsif input == "0"
                 main_menu
             else
-                puts "\n=> Found: #{ result.name }. Effect: #{ result.effect }"
-                puts "Would you like to learn #{ result.name }? (y/n)"
+                puts "\n"
+                puts "       Found: #{ result.name }"
+                puts "      Effect: #{ result.effect.split.map(&:capitalize).join(" ") }\n\n"
+                puts "=> Would you like to learn #{ result.name }? (y/n)"
                 
                 if gets.strip == "y"
                     self.info.learn_spell( result )
@@ -150,6 +152,13 @@ module Commands
                     wizards_who_know_this = spell.owner.uniq.collect{ |owner| owner.name }
                     puts "Owned By: #{ wizards_who_know_this.join(", ") }\n\n"
                 }
+            end
+        end
+
+        def top_spells
+            sorted = Spell.all.sort_by{ |spell| spell.owner.count }.reverse
+            sorted[1..10].each.with_index(1) do |spell, index|
+                puts "#{ index }. #{ spell.name } (#{ spell.owner.count })"
             end
         end
 

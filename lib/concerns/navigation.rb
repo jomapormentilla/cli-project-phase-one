@@ -166,7 +166,7 @@ module Navigation
             when "5"
                 find_spell
             when "6"
-                puts "Implement This."
+                top_spells
             else
                 puts "=> Invalid Selection\n\n"
                 spell_options
