@@ -192,7 +192,7 @@ module Navigation
             when "0"
                 main_menu
             when "1"
-                view_profile
+                view_profile( self.info )
             when "2"
                 view_spells
             when "3"

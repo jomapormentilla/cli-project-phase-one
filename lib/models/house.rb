@@ -10,7 +10,7 @@ class House
         @mascot = mascot
         @founder = founder
         @head_master = head_master
-        @house_points = 0
+        @house_points = rand(1..1000)
 
         @@all << self
     end

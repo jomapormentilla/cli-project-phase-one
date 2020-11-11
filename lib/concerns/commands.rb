@@ -3,23 +3,21 @@ module Commands
     end
 
     module InstanceMethods
-        def view_profile( wizard=nil )
-            _wizard = ""
-            _wizard = wizard == nil ? self.info : wizard
-            
-            if _wizard.house.class == NilClass
-                puts "           NAME: #{ _wizard.name }"
-                puts "         SPELLS: #{ _wizard.spells.uniq.length }"
-                puts "        FRIENDS: #{ _wizard.friends.uniq.length }"
-                puts "        ENEMIES: #{ _wizard.enemies.uniq.length }\n\n"
+        def view_profile( wizard )
+            if wizard.house == nil
+                house_name = "UNKNOWN"
+                house_points = "N/A"
             else
-                puts "           NAME: #{ _wizard.name }"
-                puts "          HOUSE: #{ _wizard.house.name }"
-                puts "         SPELLS: #{ _wizard.spells.uniq.length }"
-                puts "        FRIENDS: #{ _wizard.friends.uniq.length }"
-                puts "        ENEMIES: #{ _wizard.enemies.uniq.length }"
-                puts "  POINTS EARNED: #{ _wizard.house.house_points }\n\n"
+                house_name = wizard.house.name
+                house_points = wizard.house.house_points
             end
+            
+            puts "           NAME: #{ wizard.name }"
+            puts "          HOUSE: #{ house_name }"
+            puts "         SPELLS: #{ wizard.spells.uniq.length }"
+            puts "        FRIENDS: #{ wizard.friends.uniq.length }"
+            puts "        ENEMIES: #{ wizard.enemies.uniq.length }"
+            puts "  POINTS EARNED: #{ house_points }\n\n"
         end
 
         def view_friends
@@ -69,10 +67,12 @@ module Commands
 
         def list_houses
             House.all.each.with_index(1) do |house, index|
-                puts "#{ index }. #{ house.name.upcase }"
-                puts "   Founder: #{ house.founder }"
-                puts "   Head Master: #{ house.head_master }"
-                puts "   Mascot: #{ house.mascot.capitalize }"
+                house_count = Student.all.select{ |student| student.house != nil && student.house.name == house.name }.count
+                puts "              #{ index }. #{ house.name.upcase }"
+                puts "        Founder: #{ house.founder }"
+                puts "    Head Master: #{ house.head_master }"
+                puts "         Mascot: #{ house.mascot.capitalize }"
+                puts "        Members: #{ house_count }"
                 puts "   House Points: #{ house.house_points }\n\n"
             end
         end
