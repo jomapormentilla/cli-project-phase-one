@@ -7,21 +7,15 @@ class API
     def initialize
         @url_base = "http://hp-api.herokuapp.com/api/"
         @url_spells = "https://www.pojo.com/harry-potter-spell-list/"
-        @url_houses = "https://owlcation.com/humanities/Harrypotterhouses"
+        @url_houses = "https://pottermore.fandom.com/wiki/Houses"
 
         start
     end
     
     def start
         get_characters
-
-        spell_scraper( @url_spells )
         get_spells
-
-        house_scraper( @url_houses )
         get_houses
-
-        binding.pry
     end
     
     def get_data( type )
@@ -37,8 +31,8 @@ class API
     end
     
     def get_houses
-        houses = get_data("houses").uniq
-        houses.each{ |house| House.new( house["name"], house["mascot"], house["founder"], house["headOfHouse"]) }
+        houses = house_scraper( @url_houses )
+        houses.each{ |house| House.new( house[:name], house[:mascot], house[:founder], house[:head_master]) }
     end
 
     def get_characters
@@ -77,9 +71,16 @@ class API
     def house_scraper( url )
         html = Nokogiri::HTML(open(url))
 
-        binding.pry
         array = []
-
+        html.css(".infoboxtable tbody").each do |tbody|
+            hash = {
+                name: tbody.css("td")[2].css("p").text.split[1],
+                founder: tbody.css("td")[2].css("p").text,
+                mascot: tbody.css("td")[6].css("p").text,
+                head_master: tbody.css("td")[10].css("p").text
+            }
+            array << hash
+        end
         array
     end
 end
