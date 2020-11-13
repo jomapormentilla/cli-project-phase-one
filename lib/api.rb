@@ -13,9 +13,9 @@ class API
     end
     
     def start
-        get_characters
         get_spells
         get_houses
+        get_characters
     end
     
     def get_data( type )
@@ -40,13 +40,13 @@ class API
         characters.each{ |character|
             if character["hogwartsStudent"]
                 student = Student.new( character["name"], "Student", character["house"] )
-                # student.learn_spell( Spell.all.sample )     # Learns a random spell on initialization
+                student.learn_spell( Spell.all.sample )     # Learns a random spell on initialization
             elsif character["hogwartsStaff"]
                 professor = Professor.new( character["name"], "Professor", character["house"] ) 
-                # professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
+                professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
             else
                 professor = Wizard.new( character["name"], "Staff", character["house"] ) 
-                # professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
+                professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
             end
         }
     end

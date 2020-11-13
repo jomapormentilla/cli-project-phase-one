@@ -20,7 +20,11 @@ module Clistrict
         end
 
         def add_to_history( string )
-            @history << string
+            t = Time.now
+            t_str = "#{ t.hour }:#{ t.min }:#{ t.sec }"
+            result = "#{ t_str } - #{ string }"
+            
+            @history << result
         end
 
         def get_name
@@ -60,9 +64,9 @@ module Clistrict
         end
 
         def exit_application
-            puts "Before you go, here is a transcript of your experience at Hogwarts:\n\n"
+            puts "=> Before you go, here is a transcript of your experience at Hogwarts:\n\n"
             @history.each do |event|
-                puts "- #{ event }"
+                puts "   #{ event }"
             end
             puts "\n=> See you again soon, #{ self.info.name }!\n\n"
             exit!

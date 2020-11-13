@@ -4,20 +4,13 @@ module Commands
 
     module InstanceMethods
         def view_profile( wizard )
-            if wizard.house == nil
-                house_name = "UNKNOWN"
-                house_points = "N/A"
-            else
-                house_name = wizard.house.name
-                house_points = wizard.house.house_points
-            end
+            house_name = wizard.house == nil ? "UNKNOWN" : wizard.house.name
             
             puts "           NAME: #{ wizard.name }"
             puts "          HOUSE: #{ house_name }"
             puts "         SPELLS: #{ wizard.spells.uniq.length }"
             puts "        FRIENDS: #{ wizard.friends.uniq.length }"
-            puts "        ENEMIES: #{ wizard.enemies.uniq.length }"
-            puts "  POINTS EARNED: #{ house_points }\n\n"
+            puts "        ENEMIES: #{ wizard.enemies.uniq.length }\n\n"
         end
 
         def view_friends
@@ -68,13 +61,30 @@ module Commands
         def list_houses
             House.all.each.with_index(1) do |house, index|
                 house_count = Wizard.all.select{ |wizard| wizard.house != nil && wizard.house.name == house.name }.count
+
                 puts "              #{ index }. #{ house.name.upcase }"
                 puts "        Founder: #{ house.founder }"
                 puts "    Head Master: #{ house.head_master }"
                 puts "         Mascot: #{ house.mascot.capitalize }"
-                puts "        Members: #{ house_count }"
-                puts "   House Points: #{ house.house_points }\n\n"
+                puts "        Members: #{ house_count }\n\n"
             end
+        end
+
+        def create_wizard( role )
+            puts "=> Please enter the name of the new #{ role }:"
+            input = gets.strip
+
+            if role == "student"
+                new_wizard = Student.new( input, role )
+            elsif role == "professor"
+                new_wizard = Professor.new( input, role )
+            end
+
+            new_wizard.house = House.all.sample
+
+            puts "=> #{ new_wizard.name } has joined Hogwarts!\n"
+
+            friend_wizard( new_wizard )
         end
 
         def find_wizard
@@ -82,13 +92,13 @@ module Commands
             input = gets.strip
             result = Wizard.find_by_first_or_last_name( input )
 
-            if input == "" || result == nil
-                puts "\n=> Sorry, it seems #{ input } does not go to Hogwarts! Try searching a different name:"
-                find_wizard
-            elsif input == "0"
+            if input == "0"
                 main_menu
-            elsif input == self.info.name
-                puts "\n=> Last we checked, there is only ONE of you. Try searching for another wizard."
+            elsif input == "" || result == nil
+                puts "\n=> Sorry, it seems '#{ input }' does not go to Hogwarts! Try searching a different name:"
+                find_wizard
+            elsif input.downcase == self.info.name.downcase
+                puts "\n=> That's YOU! Let's search for another wizard."
                 find_wizard
             else
                 if result.house != nil
@@ -198,10 +208,6 @@ module Commands
             puts "=> #{ output }\n\n"
 
             add_to_history( output )
-        end
-
-        def teach_spell
-            puts "Need to Implement This."
         end
     end
 end

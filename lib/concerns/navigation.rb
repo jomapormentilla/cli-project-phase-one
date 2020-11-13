@@ -6,7 +6,7 @@ module Navigation
         def get_commands
             @commands = [
                 {
-                    title: "Information about all Houses",
+                    title: "Display Information on All Houses",
                     cmd: 'houses', 
                     method: 'list_houses'   
                 },
@@ -49,13 +49,13 @@ module Navigation
         end
 
         def main_menu
-            puts "\nWhat would you like to do next, #{ self.info.name }?\n\n"
+            puts "\n=> What would you like to do next, #{ self.info.name }?\n\n"
             
             @commands.each do |command|
                 buffer = 15 - command[:cmd].split("").length
                 arr = Array.new(buffer, " ").join("")
                 
-                puts "      `#{ command[:cmd] }` #{ arr } - #{ command[:title] }"
+                puts "   `#{ command[:cmd] }` #{ arr } - #{ command[:title] }"
             end
             
             puts "\n"
@@ -77,9 +77,7 @@ module Navigation
         def professor_options
             options = [
                 "Main Menu",
-                "List Alphabetically",
-                "List by House",
-                "List by Role",
+                "List All",
                 "Create New"
             ]
 
@@ -95,11 +93,7 @@ module Navigation
             when "1"
                 list_professors
             when "2"
-                puts "Implement This."
-            when "3"
-                puts "Implement This."
-            when "4"
-                puts "Implement This."
+                create_wizard("professor")
             else
                 puts "=> Invalid Selection\n\n"
                 professor_options
@@ -110,7 +104,6 @@ module Navigation
             options = [
                 "Main Menu",
                 "List All",
-                "Sort By Last Name",
                 "Create New"
             ]
 
@@ -126,9 +119,7 @@ module Navigation
             when "1"
                 list_students
             when "2"
-                puts "Implement This."
-            when "3"
-                puts "Implement This."
+                create_wizard("student")
             else
                 puts "=> Invalid Selection\n\n"
                 student_options
@@ -140,7 +131,6 @@ module Navigation
                 "Main Menu",
                 "Learn a Spell",
                 "Create a Spell",
-                "Teach a Spell",
                 "Spells You Know",
                 "Search for a Spell",
                 "Most Popular"
@@ -160,12 +150,10 @@ module Navigation
             when "2"
                 create_spell
             when "3"
-                teach_spell
-            when "4"
                 view_spells
-            when "5"
+            when "4"
                 find_spell
-            when "6"
+            when "5"
                 top_spells
             else
                 puts "=> Invalid Selection\n\n"
@@ -208,7 +196,6 @@ module Navigation
         def search_options
             options = [
                 "Main Menu",
-                "House",
                 "Wizard",
                 "Spells"
             ]
@@ -223,10 +210,8 @@ module Navigation
             when "0"
                 main_menu
             when "1"
-                list_professors
-            when "2"
                 find_wizard
-            when "3"
+            when "2"
                 find_spell
             else
                 puts "=> Invalid Selection\n\n"
