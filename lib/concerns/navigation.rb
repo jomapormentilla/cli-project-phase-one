@@ -36,11 +36,6 @@ module Navigation
                     method: 'search_options'  
                 },
                 {
-                    title: "Binding Pry",
-                    cmd: 'pry',
-                    method: 'use_pry'
-                },
-                {
                     title: "Leave Hogwarts",
                     cmd: 'quit',
                     method: 'exit_application'  
@@ -93,7 +88,7 @@ module Navigation
             when "1"
                 list_professors
             when "2"
-                create_wizard("professor")
+                create_wizard("Professor")
             else
                 puts "=> Invalid Selection\n\n"
                 professor_options
@@ -119,7 +114,7 @@ module Navigation
             when "1"
                 list_students
             when "2"
-                create_wizard("student")
+                create_wizard("Student")
             else
                 puts "=> Invalid Selection\n\n"
                 student_options

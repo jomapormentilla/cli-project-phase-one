@@ -42,10 +42,6 @@ module Clistrict
         def sorting_hat
             @house = House.all.collect{ |house| house.name }.sample
         end
-
-        def use_pry
-            binding.pry
-        end
     
         def welcome_banner
             print "\e[2J\e[f"

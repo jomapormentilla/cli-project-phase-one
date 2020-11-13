@@ -18,7 +18,7 @@ module Commands
             if my_friends == []
                 puts "\n=> You don't have any friends.\n"
             else
-                my_friends.each.with_index(1){ |friend, index| puts "       #{ index }. #{ friend.name }" }
+                my_friends.uniq.each.with_index(1){ |friend, index| puts "       #{ index }. #{ friend.name }" }
             end
         end
 
@@ -28,7 +28,7 @@ module Commands
             if my_enemies == []
                 puts "\n=> You don't have any enemies.\n"
             else
-                my_enemies.each.with_index(1){ |enemy, index| puts "       #{ index }. #{ enemy.name }" }
+                my_enemies.uniq.each.with_index(1){ |enemy, index| puts "       #{ index }. #{ enemy.name }" }
             end
         end
 
@@ -74,13 +74,13 @@ module Commands
             puts "=> Please enter the name of the new #{ role }:"
             input = gets.strip
 
-            if role == "student"
+            if role == "Student"
                 new_wizard = Student.new( input, role )
-            elsif role == "professor"
+            elsif role == "Professor"
                 new_wizard = Professor.new( input, role )
             end
 
-            new_wizard.house = House.all.sample
+            new_wizard.house = House.all.sample.name
 
             puts "=> #{ new_wizard.name } has joined Hogwarts!\n"
 

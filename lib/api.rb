@@ -22,7 +22,7 @@ class API
         url = @url_base + type
         uri = URI( url )                    # Turns the URL into an HTTP Object that we can use in our program
         response = Net::HTTP.get( uri )     # Returns a response as a String Object
-        arr = JSON.parse( response )        # Converts the response String to a JSON format 
+        arr = JSON.parse( response )        # Converts the response String to JSON format 
     end
 
     def get_spells
@@ -40,13 +40,13 @@ class API
         characters.each{ |character|
             if character["hogwartsStudent"]
                 student = Student.new( character["name"], "Student", character["house"] )
-                student.learn_spell( Spell.all.sample )     # Learns a random spell on initialization
+                5.times{ student.learn_spell( Spell.all.sample ) }
             elsif character["hogwartsStaff"]
                 professor = Professor.new( character["name"], "Professor", character["house"] ) 
-                professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
+                5.times{ professor.learn_spell( Spell.all.sample ) }
             else
-                professor = Wizard.new( character["name"], "Staff", character["house"] ) 
-                professor.learn_spell( Spell.all.sample )   # Learns a random spell on initialization
+                wizard = Wizard.new( character["name"], "Staff", character["house"] ) 
+                5.times{ wizard.learn_spell( Spell.all.sample ) }
             end
         }
     end
